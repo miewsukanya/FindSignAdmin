@@ -67,7 +67,7 @@
         android:layout_width="159dp"
         android:layout_height="62dp"
         app:srcCompat="@drawable/but_login"
-        android:id="@+id/imageView"
+        android:id="@+id/imgLogin"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp" />
 </LinearLayout>
