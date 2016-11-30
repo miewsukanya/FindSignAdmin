@@ -185,7 +185,7 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         if (marker != null){
             marker.remove();
         }
-       // LatLng latLng = marker.getPosition();
+        // LatLng latLng = marker.getPosition();
         MarkerOptions options = new MarkerOptions()
                 .title(locality)
                 .position(new LatLng(lnt,lng))

@@ -90,10 +90,12 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="159dp"
+            android:layout_height="70dp"
             app:srcCompat="@drawable/but_add"
             android:id="@+id/ingInsertSign"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 </LinearLayout>
