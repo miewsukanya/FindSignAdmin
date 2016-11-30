@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_insert"
     android:layout_width="match_parent"
@@ -8,6 +9,91 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="miewsukanya.com.findsignadmin.InsertActivity">
+    tools:context="miewsukanya.com.findsignadmin.InsertActivity"
+    android:orientation="vertical"
+    android:background="@drawable/bg_adp2"
+    android:weightSum="1">
 
-</RelativeLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:text="ชื่อป้าย:"
+            android:textSize="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:layout_marginTop="80dp"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="กรุณากรอกชื่อป้าย"
+            android:ems="10"
+            android:id="@+id/edtSignName"
+            android:layout_marginTop="80dp"
+            android:paddingLeft="15dp"
+            android:layout_marginLeft="15dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal">
+
+        <EditText
+            android:layout_width="194dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="ค้นหาสถานที่"
+            android:ems="10"
+            android:id="@+id/edtSearch"
+            android:layout_marginTop="10dp" />
+
+        <ImageView
+            android:layout_height="62dp"
+            app:srcCompat="@drawable/but_place"
+            android:id="@+id/imgSearch"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="140dp"
+            android:onClick="geoLocate"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <fragment
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:id="@+id/mapFragment"
+            android:layout_below="@+id/editText"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="350dp"
+            android:layout_height="250dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/but_add"
+            android:id="@+id/ingInsertSign"
+            android:layout_marginTop="5dp" />
+    </LinearLayout>
+</LinearLayout>
