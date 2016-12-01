@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -173,6 +174,61 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        if (mGoogleMap != null){
+//move icon place
+            mGoogleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                @Override
+                public void onMarkerDragStart(Marker marker) {
+
+                }
+
+                @Override
+                public void onMarkerDrag(Marker marker) {
+
+                }
+
+                @Override
+                public void onMarkerDragEnd(Marker marker) {
+                    Geocoder gc = new Geocoder(DelActivity.this);
+                    LatLng latLng = marker.getPosition();
+                    double lat = latLng.latitude;
+                    double lng = latLng.longitude;
+                    List<android.location.Address> list =null;
+                    try {
+                        list = gc.getFromLocation(lat,lng,1);
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+                    android.location.Address add = list.get(0);
+                    marker.setTitle(add.getLocality());
+                    marker.showInfoWindow();
+                }
+            });
+            mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                @Override
+                public View getInfoWindow(Marker marker) {
+                    return null;
+                }
+                @Override
+                public View getInfoContents(Marker marker) {
+
+                    View v = getLayoutInflater().inflate(R.layout.info_window,null);
+                    TextView tvLocality = (TextView) v.findViewById(R.id.tv_locality);
+                    TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
+                    TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
+                    TextView tvSnippet = (TextView) v.findViewById(R.id.tv_snippet);
+
+                    LatLng latLng = marker.getPosition();
+                    tvLocality.setText(marker.getTitle());
+                    tvLat.setText("Latitude: "+latLng.latitude);
+                    tvLng.setText("Longitude: "+latLng.longitude);
+                    tvSnippet.setText(marker.getSnippet());
+
+                    return v;
+
+                }
+            });
+        }
     }//onMapReady
 
     Marker marker;
