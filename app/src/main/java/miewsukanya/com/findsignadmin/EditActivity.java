@@ -212,6 +212,10 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                 @Override
                 public View getInfoContents(Marker marker) {
 
+                    //blind widget
+                    EditText edt_lat = (EditText) findViewById(R.id.edt_lat);
+                    EditText edt_lng = (EditText) findViewById(R.id.edt_lng);
+
                     View v = getLayoutInflater().inflate(R.layout.info_window,null);
                     TextView tvLocality = (TextView) v.findViewById(R.id.tv_locality);
                     TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
@@ -223,6 +227,10 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                     tvLat.setText("Latitude: "+latLng.latitude);
                     tvLng.setText("Longitude: "+latLng.longitude);
                     tvSnippet.setText(marker.getSnippet());
+
+                    //show lat long in edit text
+                    edt_lat.setText(latLng.latitude+"");
+                    edt_lng.setText(latLng.longitude+"");
 
                     return v;
 

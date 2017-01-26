@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.CameraUpdate;
@@ -37,10 +39,12 @@ import java.util.List;
 public class InsertActivity extends AppCompatActivity implements OnMapReadyCallback {
     //Explicit
     GoogleMap mGoogleMap;
-    EditText edtSignName,edtSearch;
-    ImageView imgSearch, imgInsert;
+    EditText edtSignName,edtSearch,edt_lat,edt_lng;
+    String lngString, latString,signString;
+    ImageView imgInsert;
+    private String urlAddSign = "http://202.28.94.32/2559/563020232-9/add2.php";
+    RequestQueue requestQueue;
 
-    //GoogleApiClient mGoogleClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +59,78 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         } else {
             //No google map layout
         }
+
+        edtSignName = (EditText) findViewById(R.id.edtSignName);
+        edt_lat = (EditText) findViewById(R.id.edt_lat);
+        edt_lng = (EditText) findViewById(R.id.edt_lng);
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+
     }//Main Method
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
+        mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        if (mGoogleMap != null){
+            //move icon place
+            mGoogleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                @Override
+                public void onMarkerDragStart(Marker marker) {
+
+                }
+                @Override
+                public void onMarkerDrag(Marker marker) {
+
+                }
+                @Override
+                public void onMarkerDragEnd(Marker marker) {
+                    Geocoder gc = new Geocoder(InsertActivity.this);
+                    LatLng latLng = marker.getPosition();
+                    double lat = latLng.latitude;
+                    double lng = latLng.longitude;
+                    List<android.location.Address> list =null;
+                    try {
+                        list = gc.getFromLocation(lat,lng,1);
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+                    android.location.Address add = list.get(0);
+                    marker.setTitle(add.getLocality());
+                    marker.showInfoWindow();
+                }
+            });
+            mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                @Override
+                public View getInfoWindow(Marker marker) {
+                    return null;
+                }
+                @Override
+                public View getInfoContents(Marker marker) {
+                    //blind widget
+                    final EditText lat = (EditText) findViewById(R.id.edt_lat);
+                    final EditText lng = (EditText) findViewById(R.id.edt_lng);
+                    final EditText signName = (EditText) findViewById(R.id.edtSignName);
+
+                    View v = getLayoutInflater().inflate(R.layout.info_window,null);
+                    TextView tvLocality = (TextView) v.findViewById(R.id.tv_locality);
+                    TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
+                    TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
+                    TextView tvSnippet = (TextView) v.findViewById(R.id.tv_snippet);
+
+                    LatLng latLng = marker.getPosition();
+                    tvLocality.setText(marker.getTitle());
+                    tvLat.setText("Latitude: "+latLng.latitude);
+                    tvLng.setText("Longitude: "+latLng.longitude);
+                    tvSnippet.setText(marker.getSnippet());
+
+                    //show lat long in edit text
+                    lat.setText(latLng.latitude+"");
+                    lng.setText(latLng.longitude+"");
+                    return v;
+                }
+            });
+        }
+    }//onMapReady
 
     //Search Map All
     private class GetMap extends AsyncTask<Void, Void, String> {
@@ -113,17 +188,11 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                                 .title(strSignName))
                                 .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign60_s));
                     } else {
-                        //(strSignName.equals(strSignName.equals("sign80") || strSignName.equals("Sign80"))) //{
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
                                 .title(strSignName))
                                 .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign80_s));
                     }
-                    //}else
-                        /*mGoogleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
-                            .title(strSignName));
-                            //.icon(BitmapDescriptorFactory.fromResource(mapIcon.showIcon())));*/
                     mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                     LatLng coordinate = new LatLng (Double.parseDouble(strLat), Double.parseDouble(strLng));
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 15));
@@ -170,67 +239,6 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         mGoogleMap.moveCamera(update);
     }//goToLocationZoom
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mGoogleMap = googleMap;
-        mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        if (mGoogleMap != null){
-//move icon place
-            mGoogleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                @Override
-                public void onMarkerDragStart(Marker marker) {
-
-                }
-
-                @Override
-                public void onMarkerDrag(Marker marker) {
-
-                }
-
-                @Override
-                public void onMarkerDragEnd(Marker marker) {
-                    Geocoder gc = new Geocoder(InsertActivity.this);
-                    LatLng latLng = marker.getPosition();
-                    double lat = latLng.latitude;
-                    double lng = latLng.longitude;
-                    List<android.location.Address> list =null;
-                    try {
-                        list = gc.getFromLocation(lat,lng,1);
-                    }catch (IOException e){
-                        e.printStackTrace();
-                    }
-                    android.location.Address add = list.get(0);
-                    marker.setTitle(add.getLocality());
-                    marker.showInfoWindow();
-                }
-            });
-            mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                @Override
-                public View getInfoWindow(Marker marker) {
-                    return null;
-                }
-                @Override
-                public View getInfoContents(Marker marker) {
-
-                    View v = getLayoutInflater().inflate(R.layout.info_window,null);
-                    TextView tvLocality = (TextView) v.findViewById(R.id.tv_locality);
-                    TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
-                    TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
-                    TextView tvSnippet = (TextView) v.findViewById(R.id.tv_snippet);
-
-                    LatLng latLng = marker.getPosition();
-                    tvLocality.setText(marker.getTitle());
-                    tvLat.setText("Latitude: "+latLng.latitude);
-                    tvLng.setText("Longitude: "+latLng.longitude);
-                    tvSnippet.setText(marker.getSnippet());
-
-                    return v;
-
-                }
-            });
-        }
-    }//onMapReady
-
     Marker marker;
     //search location
     public void geoLocate(View view) throws IOException {
@@ -253,14 +261,9 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
     }//geoLocate onclick
 
     private void setMarker(String locality, double lnt, double lng) {
-        /*double lnt1 = lnt;
-        String lnt2 = String.valueOf(lnt1);
-        double lng1 = lng;
-        String lng2 = String.valueOf(lng1);*/
         if (marker != null){
             marker.remove();
         }
-        // LatLng latLng = marker.getPosition();
         MarkerOptions options = new MarkerOptions()
                 .title(locality)
                 .position(new LatLng(lnt,lng))
@@ -269,5 +272,4 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                 .snippet("I am here");
         marker = mGoogleMap.addMarker(options);
     }//setMarker
-
 }//Main Class
