@@ -78,19 +78,20 @@ public class InsertBackground extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPreExecute() {
-        alertDialog = new AlertDialog.Builder(context).create();
-        alertDialog.setTitle("Insert Status");
+       // alertDialog = new AlertDialog.Builder(context).create();
+       // alertDialog.setTitle("เพิ่มข้อมูลป้าย");
+       // alertDialog.setMessage("เพิ่มข้อมูลสำเร็จ");
 
     }
 
     @Override
     protected void onPostExecute(String result) {
-        alertDialog.setMessage(result);
-        alertDialog.show();
-
+       // alertDialog.setMessage(result);
+        //alertDialog.show();
     }
     @Override
     protected void onProgressUpdate(Void... values) {
         super.onProgressUpdate(values);
     }
+
 }//main class

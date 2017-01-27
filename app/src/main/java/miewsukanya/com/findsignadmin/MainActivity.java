@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private String userString, passwordString;
     private MyConstant myConstant;
 
+    //public final static String MESSAGE_KEY = "miewsukanya.com.findsignadmin.message_key";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,12 +38,15 @@ public class MainActivity extends AppCompatActivity {
         edtUsername = (EditText) findViewById(R.id.edtUsername);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
 
+        //final EditText editText = (EditText) findViewById(R.id.edtUsername);
+
         imgLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//Get Value from Edit Text
+                //Get Value from Edit Text
                 userString = edtUsername.getText().toString().trim();
                 passwordString = edtPassword.getText().toString().trim();
+
 
                 //Check Space
                 if (userString.equals("") || passwordString.equals("")) {
@@ -52,11 +56,17 @@ public class MainActivity extends AppCompatActivity {
                             getResources().getString(R.string.message_HaveSpace));
                     myAlert.myDialog();
                 } else {
-                    //No Space
-                    SynUser synUser = new SynUser(MainActivity.this);
-                    synUser.execute(myConstant.getUrlGetJSON());
-
+                    //send data 27/01/17
+                    String message = edtUsername.getText().toString();
+                    Intent intent = new Intent(getApplicationContext(), InsertActivity.class);
+                    intent.putExtra("message", message);
+                    Log.d("Message","Name:"+ message);
+                    //  intent.putExtra(MESSAGE_KEY, message);
+                    startActivity(intent);
                 }
+                //No Space
+                SynUser synUser = new SynUser(MainActivity.this);
+                synUser.execute(myConstant.getUrlGetJSON());
             }   // onClick
         });
     }//Main Method
@@ -135,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }   //onPost
     }   // SynUser
 }//Main Class

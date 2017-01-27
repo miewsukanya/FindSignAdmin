@@ -2,6 +2,7 @@ package miewsukanya.com.findsignadmin;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
@@ -14,8 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.CameraUpdate;
@@ -42,8 +41,7 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
     EditText edtSignName,edtSearch,edt_lat,edt_lng;
     String lngString, latString,signString;
     ImageView imgInsert;
-    private String urlAddSign = "http://202.28.94.32/2559/563020232-9/add2.php";
-    RequestQueue requestQueue;
+    //RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +58,19 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
             //No google map layout
         }
 
+
+        //test intent data from mainActivity 27/01/17
+        TextView textView = (TextView) findViewById(R.id.textView4);
+        Intent intent = getIntent();
+        String message = intent.getStringExtra("message");
+        textView.setText("สวัสดี : " + message);
+        textView.setTextSize(20);
+        Log.d("Name", "Name :" + message);
+
         edtSignName = (EditText) findViewById(R.id.edtSignName);
         edt_lat = (EditText) findViewById(R.id.edt_lat);
         edt_lng = (EditText) findViewById(R.id.edt_lng);
-        requestQueue = Volley.newRequestQueue(getApplicationContext());
+        //requestQueue = Volley.newRequestQueue(getApplicationContext());
 
     }//Main Method
 
@@ -109,7 +116,7 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                     //blind widget
                     final EditText lat = (EditText) findViewById(R.id.edt_lat);
                     final EditText lng = (EditText) findViewById(R.id.edt_lng);
-                    final EditText signName = (EditText) findViewById(R.id.edtSignName);
+                    //final EditText signName = (EditText) findViewById(R.id.edtSignName);
 
                     View v = getLayoutInflater().inflate(R.layout.info_window,null);
                     TextView tvLocality = (TextView) v.findViewById(R.id.tv_locality);
@@ -272,4 +279,23 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                 .snippet("I am here");
         marker = mGoogleMap.addMarker(options);
     }//setMarker
+
+    //insert lat lng
+    public void insert (View view){
+        String str_signname = edtSignName.getText().toString();
+        String str_latitude = edt_lat.getText().toString();
+        String str_longitude = edt_lng.getText().toString();
+        //String str_adid = edt_adid.getText().toString();
+
+        String type = "insert";
+        InsertBackground insertBackground = new InsertBackground(this);
+        insertBackground.execute(type,str_signname,str_latitude,str_longitude);
+
+        //alert msg
+        MyAlert myAlert = new MyAlert(InsertActivity.this, R.drawable.bird48,
+                getResources().getString(R.string.title_insert),
+                getResources().getString(R.string.message_insert));
+        myAlert.myDialog();
+
+    }//on click insert
 }//Main Class
