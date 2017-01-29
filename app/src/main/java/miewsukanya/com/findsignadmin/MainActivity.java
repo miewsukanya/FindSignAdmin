@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -56,13 +55,6 @@ public class MainActivity extends AppCompatActivity {
                             getResources().getString(R.string.message_HaveSpace));
                     myAlert.myDialog();
                 } else {
-                    //send data 27/01/17
-                    String message = edtUsername.getText().toString();
-                    Intent intent = new Intent(getApplicationContext(), InsertActivity.class);
-                    intent.putExtra("message", message);
-                    Log.d("Message","Name:"+ message);
-                    //  intent.putExtra(MESSAGE_KEY, message);
-                    startActivity(intent);
                 }
                 //No Space
                 SynUser synUser = new SynUser(MainActivity.this);
@@ -77,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         private Context context;
         private String[] nameStrings;
         private String truePassword;
+        //private String[] AdIDString;
         private boolean aBoolean = true;
 
         public SynUser(Context context) {
@@ -111,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
 
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     nameStrings[i] = jsonObject.getString("AdName");
-                    Log.d("13novV3", "name(" + i + ") ==> " + nameStrings[i]);
 
+                    Log.d("13novV3", "name(" + i + ") ==> " + nameStrings[i]);
                     //Check User
                     if (userString.equals(jsonObject.getString("AdName"))) {
                         aBoolean = false;
@@ -128,11 +121,17 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (passwordString.equals(truePassword)) {
                     //Password True
-                    Toast.makeText(context, "Welcome: "+userString, Toast.LENGTH_SHORT).show();
-
-                    //Intent to Service
-                    Intent intent = new Intent(MainActivity.this,AdminPage.class);
+                   // Toast.makeText(context, "Welcome: "+userString, Toast.LENGTH_SHORT).show();
+                    //send data 27/01/17
+                    String message = edtUsername.getText().toString();
+                    Intent intent = new Intent(getApplicationContext(), AdminPage.class);
+                    intent.putExtra("message", message);
+                    Log.d("Message","Name:"+ message);
+                    //  intent.putExtra(MESSAGE_KEY, message);
                     startActivity(intent);
+                    //Intent to Service
+                  //  Intent intent = new Intent(MainActivity.this,AdminPage.class);
+                 //   startActivity(intent);
                     finish();
                 } else {
                     //Password False
@@ -145,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }   //onPost
     }   // SynUser
 }//Main Class

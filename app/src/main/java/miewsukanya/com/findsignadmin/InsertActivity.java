@@ -41,6 +41,7 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
     EditText edtSignName,edtSearch,edt_lat,edt_lng;
     String lngString, latString,signString;
     ImageView imgInsert;
+    TextView edt_adId;
     //RequestQueue requestQueue;
 
     @Override
@@ -57,19 +58,18 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         } else {
             //No google map layout
         }
-
-
-        //test intent data from mainActivity 27/01/17
-        TextView textView = (TextView) findViewById(R.id.textView4);
+        //test intent data from mainActivity 29/01/17
+        TextView textView = (TextView) findViewById(R.id.textView6);
         Intent intent = getIntent();
-        String message = intent.getStringExtra("message");
-        textView.setText("สวัสดี : " + message);
+        String adminID = intent.getStringExtra("adminID");
+        textView.setText(adminID);
         textView.setTextSize(20);
-        Log.d("Name", "Name :" + message);
+        Log.d("adminID", "ID :" + adminID);
 
         edtSignName = (EditText) findViewById(R.id.edtSignName);
         edt_lat = (EditText) findViewById(R.id.edt_lat);
         edt_lng = (EditText) findViewById(R.id.edt_lng);
+        edt_adId = (TextView) findViewById(R.id.textView6);
         //requestQueue = Volley.newRequestQueue(getApplicationContext());
 
     }//Main Method
@@ -285,11 +285,11 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         String str_signname = edtSignName.getText().toString();
         String str_latitude = edt_lat.getText().toString();
         String str_longitude = edt_lng.getText().toString();
-        //String str_adid = edt_adid.getText().toString();
+        String str_adId = edt_adId.getText().toString();
 
         String type = "insert";
         InsertBackground insertBackground = new InsertBackground(this);
-        insertBackground.execute(type,str_signname,str_latitude,str_longitude);
+        insertBackground.execute(type,str_signname,str_latitude,str_longitude,str_adId);
 
         //alert msg
         MyAlert myAlert = new MyAlert(InsertActivity.this, R.drawable.bird48,

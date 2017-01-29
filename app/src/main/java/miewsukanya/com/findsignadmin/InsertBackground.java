@@ -39,7 +39,7 @@ public class InsertBackground extends AsyncTask<String, Void, String> {
                 String str_signname = params[1];
                 String str_latitude = params[2];
                 String str_longitude = params[3];
-                //String str_adid = params[4];
+                String str_adId = params[4];
                 URL url= new URL(insert_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -49,7 +49,8 @@ public class InsertBackground extends AsyncTask<String, Void, String> {
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
                 String post_data = URLEncoder.encode("SignName","UTF-8")+"="+URLEncoder.encode(str_signname,"UTF-8")+"&"
                         +URLEncoder.encode("Latitude","UTF-8")+"="+URLEncoder.encode(str_latitude,"UTF-8")+"&"
-                        +URLEncoder.encode("Longitude","UTF-8")+"="+URLEncoder.encode(str_longitude,"UTF-8");
+                        +URLEncoder.encode("Longitude","UTF-8")+"="+URLEncoder.encode(str_longitude,"UTF-8")+"&"
+                        +URLEncoder.encode("AdID","UTF-8")+"="+URLEncoder.encode(str_adId,"UTF-8");
                 //SignName,Latitude,Longitude,AdID ชื่อคอลัมในฐานข้อมูล
                 bufferedWriter.write(post_data);
                 bufferedWriter.flush();

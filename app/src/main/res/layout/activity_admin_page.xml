@@ -13,13 +13,32 @@
     android:orientation="vertical"
     android:background="@drawable/bg_adp3">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp">
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView5" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView4" />
+    </LinearLayout>
+
     <ImageView
         android:layout_width="159dp"
         android:layout_height="62dp"
         app:srcCompat="@drawable/but_add"
         android:id="@+id/imgInsert"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="120dp" />
+        android:layout_marginTop="60dp" />
 
     <ImageView
         android:layout_width="159dp"
