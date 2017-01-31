@@ -17,7 +17,39 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_gravity="center_horizontal">
+
+        <EditText
+            android:layout_width="194dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="ค้นหาสถานที่"
+            android:id="@+id/edtSearch" />
+
+        <ImageView
+            android:layout_height="62dp"
+            app:srcCompat="@drawable/but_place"
+            android:id="@+id/imgSearch"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="140dp"
+            android:onClick="geoLocate"/>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView6"
+
+            android:textColor="#ffffff" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
 
         <TextView
@@ -26,62 +58,47 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView3"
-            android:layout_marginTop="80dp"
-            />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="กรุณากรอกชื่อป้าย"
-            android:ems="10"
-            android:id="@+id/edtSignName"
-            android:layout_marginTop="80dp"
-            android:paddingLeft="15dp"
-            android:layout_marginLeft="15dp" />
-
-        <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView6"
-
-            android:layout_weight="1"
-            android:textColor="#ffffff" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal">
-
-        <EditText
-            android:layout_width="194dp"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="ค้นหาสถานที่"
-            android:ems="10"
-            android:id="@+id/edtSearch"
             android:layout_marginTop="10dp" />
 
-        <ImageView
-            android:layout_height="62dp"
-            app:srcCompat="@drawable/but_place"
-            android:id="@+id/imgSearch"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="140dp"
-            android:onClick="geoLocate"/>
+        <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radg_signname">
+
+            <RadioButton
+                android:orientation="horizontal"
+                android:text="@string/sign45"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rad_sign45"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp" />
+
+            <RadioButton
+                android:text="@string/sign60"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rad_sign60"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp" />
+
+            <RadioButton
+                android:text="@string/sign80"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rad_sign80"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp" />
+        </RadioGroup>
+
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="10dp">
 
         <fragment
             android:name="com.google.android.gms.maps.MapFragment"

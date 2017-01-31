@@ -45,14 +45,6 @@
     <ImageView
         android:layout_width="159dp"
         android:layout_height="62dp"
-        app:srcCompat="@drawable/but_edit"
-        android:id="@+id/imgEdit"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp" />
-
-    <ImageView
-        android:layout_width="159dp"
-        android:layout_height="62dp"
         app:srcCompat="@drawable/but_del"
         android:id="@+id/imgDel"
         android:layout_gravity="center_horizontal"

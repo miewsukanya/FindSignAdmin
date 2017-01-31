@@ -40,7 +40,7 @@ public class AdminPage extends AppCompatActivity {
 
         //BindWidget
         imgInsert = (ImageView) findViewById(R.id.imgInsert);
-        imgEdit = (ImageView) findViewById(R.id.imgEdit);
+       // imgEdit = (ImageView) findViewById(R.id.imgEdit);
         imgDel = (ImageView) findViewById(R.id.imgDel);
         AdIdTextView = (TextView) findViewById(R.id.textView4);
         AdNameTextView = (TextView) findViewById(R.id.textView5);
@@ -64,7 +64,7 @@ public class AdminPage extends AppCompatActivity {
                // startActivity(new Intent(AdminPage.this, InsertActivity.class));
             }
         });
-        //imgEdit controller
+        /*imgEdit controller
         imgEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,12 +75,18 @@ public class AdminPage extends AppCompatActivity {
                 startActivity(intent);
                 //startActivity(new Intent(AdminPage.this,EditActivity.class));
             }
-        });
+        });*/
         //imgDel controller
         imgDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AdminPage.this,DelActivity.class));
+                //ส่งค่า AdminID ไป InsertActivity 29.01.17
+                String adminID = AdIdTextView.getText().toString();
+                Intent intent = new Intent(getApplicationContext(), DelActivity.class);
+                intent.putExtra("adminID", adminID);
+                Log.d("adminID","ID:"+ adminID);
+                startActivity(intent);
+                //startActivity(new Intent(AdminPage.this,DelActivity.class));
             }
         });
     }//Main Method

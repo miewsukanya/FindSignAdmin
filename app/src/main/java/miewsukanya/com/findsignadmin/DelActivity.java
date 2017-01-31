@@ -103,13 +103,13 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     // MapIcon mapIcon = new MapIcon(context, Integer.parseInt(strIcon));
                     //Create Marker Sign
-                    if (strSignName.equals("sign45")) {
+                    if (strSignName.equals("Sign45") || strSignName.equals("sign45")) {
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
                                 .title(strSignName))
                                 .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign45_ss));
 
-                    } else if (strSignName.equals("sign60")) {
+                    } else if (strSignName.equals("Sign60") || strSignName.equals("sign60")) {
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
                                 .title(strSignName))

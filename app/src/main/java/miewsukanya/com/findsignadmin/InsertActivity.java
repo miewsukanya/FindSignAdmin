@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,15 +35,19 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class InsertActivity extends AppCompatActivity implements OnMapReadyCallback {
     //Explicit
     GoogleMap mGoogleMap;
-    EditText edtSignName,edtSearch,edt_lat,edt_lng;
+    //EditText edtSignName;
+    EditText edtSearch,edt_lat,edt_lng;
     String lngString, latString,signString;
     ImageView imgInsert;
     TextView edt_adId;
+    RadioGroup signnameRadioGroup;
+    RadioButton signnameRadioButton;
     //RequestQueue requestQueue;
 
     @Override
@@ -58,7 +64,7 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         } else {
             //No google map layout
         }
-        //test intent data from mainActivity 29/01/17
+        //intent data from mainActivity 29/01/17
         TextView textView = (TextView) findViewById(R.id.textView6);
         Intent intent = getIntent();
         String adminID = intent.getStringExtra("adminID");
@@ -66,7 +72,6 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         textView.setTextSize(20);
         Log.d("adminID", "ID :" + adminID);
 
-        edtSignName = (EditText) findViewById(R.id.edtSignName);
         edt_lat = (EditText) findViewById(R.id.edt_lat);
         edt_lng = (EditText) findViewById(R.id.edt_lng);
         edt_adId = (TextView) findViewById(R.id.textView6);
@@ -79,6 +84,30 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         if (mGoogleMap != null){
+
+            //touch map set marker
+            mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    //touch map add marker
+                    //  int n = 99;
+                    if (marker != null) {
+                        marker.remove();
+                    }
+                    mGoogleMap.addMarker(new MarkerOptions().position(latLng));
+                    marker.showInfoWindow();
+                    // marker.remove();
+                }//on map click
+            });
+
+            //touch marker remove
+            mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                   // marker.remove();
+                    return false;
+                }
+            });
             //move icon place
             mGoogleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                 @Override
@@ -91,7 +120,7 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                 }
                 @Override
                 public void onMarkerDragEnd(Marker marker) {
-                    Geocoder gc = new Geocoder(InsertActivity.this);
+                   /*Geocoder gc = new Geocoder(InsertActivity.this);
                     LatLng latLng = marker.getPosition();
                     double lat = latLng.latitude;
                     double lng = latLng.longitude;
@@ -103,8 +132,10 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                     }
                     android.location.Address add = list.get(0);
                     marker.setTitle(add.getLocality());
-                    marker.showInfoWindow();
-                }
+                    marker.showInfoWindow();*/
+                   // marker.remove();
+                }//on drag end marker
+
             });
             mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                 @Override
@@ -183,14 +214,14 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
 
                     // MapIcon mapIcon = new MapIcon(context, Integer.parseInt(strIcon));
                     //Create Marker Sign
-                    if (strSignName.equals("sign45")) {
+                    if (strSignName.equals("Sign45") || strSignName.equals("sign45")) {
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
                                 .title(strSignName)
                                 .snippet(strSignID))
                                 .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign45_ss));
 
-                    } else if (strSignName.equals("sign60")) {
+                    } else if (strSignName.equals("Sign60") || strSignName.equals("sign60")) {
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
                                 .title(strSignName)
@@ -280,19 +311,35 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         }
         MarkerOptions options = new MarkerOptions()
                 .title(locality)
-                .position(new LatLng(lnt,lng))
+                .position(new LatLng(lnt, lng));
                 //can move
-                .draggable(true);
+                // .draggable(true);
                 //.snippet("I am here");
         marker = mGoogleMap.addMarker(options);
+
     }//setMarker
+
+    List<Marker >mMarkers = new ArrayList<Marker>() ;
+    private void removeMarkers() {
+        for (Marker marker : mMarkers) {
+            marker.remove();
+        }
+        mMarkers.clear();
+    }//remove marker
 
     //insert lat lng
     public void insert (View view){
-        String str_signname = edtSignName.getText().toString();
+
+        // select radio button sign name
+        signnameRadioGroup = (RadioGroup) findViewById(R.id.radg_signname);
+        int selected_id = signnameRadioGroup.getCheckedRadioButtonId();
+        signnameRadioButton = (RadioButton) findViewById(selected_id);
+        signnameRadioButton.getText().toString();
+
         String str_latitude = edt_lat.getText().toString();
         String str_longitude = edt_lng.getText().toString();
         String str_adId = edt_adId.getText().toString();
+        String str_signname=signnameRadioButton.getText().toString();
 
         String type = "insert";
         InsertBackground insertBackground = new InsertBackground(this);
