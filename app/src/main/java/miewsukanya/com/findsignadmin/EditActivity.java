@@ -2,6 +2,7 @@ package miewsukanya.com.findsignadmin;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
@@ -37,7 +38,8 @@ import java.util.List;
 public class EditActivity extends AppCompatActivity implements OnMapReadyCallback {
     //Explicit
     GoogleMap mGoogleMap;
-    EditText edtSignName,edtSearch;
+    EditText edtSignName,edtSearch,edt_lat,edt_lng;
+    TextView edt_adId;
     ImageView imgSearch, imgInsert;
 
     //GoogleApiClient mGoogleClient;
@@ -55,6 +57,18 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else {
             //No google map layout
         }
+        //AdID from Admin page
+        TextView textView = (TextView) findViewById(R.id.textView7);
+        Intent intent = getIntent();
+        String adminID = intent.getStringExtra("adminID");
+        textView.setText(adminID);
+        textView.setTextSize(20);
+        Log.d("adminID", "ID :" + adminID);
+
+        edtSignName = (EditText) findViewById(R.id.edtSignName);
+        edt_lat = (EditText) findViewById(R.id.edt_lat);
+        edt_lng = (EditText) findViewById(R.id.edt_lng);
+        edt_adId = (TextView) findViewById(R.id.textView7);
     }//Main Method
 
     //Search Map All
@@ -104,31 +118,30 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                     if (strSignName.equals("sign45")) {
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
-                                .title(strSignName))
-                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign45_s));
-
+                                .title(strSignName)
+                                .draggable(true)) //สามารถเคลื่อนตำแหน่งของป้ายได้
+                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign45_ss));
+                        //edtSignName.setText("sign45");
                     } else if (strSignName.equals("sign60")) {
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
-                                .title(strSignName))
-                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign60_s));
+                                .title(strSignName)
+                                .draggable(true)) //สามารถเคลื่อนตำแหน่งของป้ายได้
+                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign60_ss));
+
                     } else {
                         //(strSignName.equals(strSignName.equals("sign80") || strSignName.equals("Sign80"))) //{
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
-                                .title(strSignName))
-                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign80_s));
+                                .title(strSignName)
+                                .draggable(true)) //สามารถเคลื่อนตำแหน่งของป้ายได้
+                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign80_ss));
+
                     }
-                    //}else
-                        /*mGoogleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
-                            .title(strSignName));
-                            //.icon(BitmapDescriptorFactory.fromResource(mapIcon.showIcon())));*/
                     mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                     LatLng coordinate = new LatLng (Double.parseDouble(strLat), Double.parseDouble(strLng));
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 15));
                     goToLocationZoom(Double.parseDouble(strLat), Double.parseDouble(strLng));
-                    //  Log.d("Data", strIcon);
                 }// for
             } catch (Exception e) {
                 e.printStackTrace();
@@ -175,7 +188,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         if (mGoogleMap != null){
-//move icon place
+            //move icon place
             mGoogleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                 @Override
                 public void onMarkerDragStart(Marker marker) {
@@ -231,9 +244,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                     //show lat long in edit text
                     edt_lat.setText(latLng.latitude+"");
                     edt_lng.setText(latLng.longitude+"");
-
                     return v;
-
                 }
             });
         }
@@ -249,9 +260,14 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
         Geocoder gc = new Geocoder(this);
         List<Address> list = gc.getFromLocationName(location, 1);
         android.location.Address address = list.get(0);
-        String locality = address.getLocality();
+        //String locality = address.getLocality();
+        //ค้นหาตำแหน่ง
+        String locality = String.format("%s, %s",
+                address.getMaxAddressLineIndex() > 0 ?
+                address.getAddressLine(0) : "",
+                address.getCountryName());
 
-        Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
 
         double lnt = address.getLatitude();
         double lng = address.getLongitude();
@@ -261,10 +277,6 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
     }//geoLocate onclick
 
     private void setMarker(String locality, double lnt, double lng) {
-        /*double lnt1 = lnt;
-        String lnt2 = String.valueOf(lnt1);
-        double lng1 = lng;
-        String lng2 = String.valueOf(lng1);*/
         if (marker != null){
             marker.remove();
         }
@@ -273,9 +285,27 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .title(locality)
                 .position(new LatLng(lnt,lng))
                 //can move
-                .draggable(true)
-                .snippet("I am here");
+                .draggable(true);
+                //.snippet("I am here");
         marker = mGoogleMap.addMarker(options);
     }//setMarker
 
+    //insert lat lng
+    public void edit (View view){
+        String str_signname = edtSignName.getText().toString();
+        String str_latitude = edt_lat.getText().toString();
+        String str_longitude = edt_lng.getText().toString();
+        String str_adId = edt_adId.getText().toString();
+
+        String type = "edit";
+        InsertBackground insertBackground = new InsertBackground(this);
+        insertBackground.execute(type,str_signname,str_latitude,str_longitude,str_adId);
+
+        //alert msg
+        MyAlert myAlert = new MyAlert(EditActivity.this, R.drawable.sign45_ss,
+                getResources().getString(R.string.title_edit),
+                getResources().getString(R.string.message_edit));
+        myAlert.myDialog();
+
+    }//on click insert
 }//Main Class

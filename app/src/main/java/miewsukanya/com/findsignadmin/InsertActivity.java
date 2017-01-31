@@ -186,19 +186,22 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                     if (strSignName.equals("sign45")) {
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
-                                .title(strSignName))
-                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign45_s));
+                                .title(strSignName)
+                                .snippet(strSignID))
+                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign45_ss));
 
                     } else if (strSignName.equals("sign60")) {
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
-                                .title(strSignName))
-                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign60_s));
+                                .title(strSignName)
+                                .snippet(strSignID))
+                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign60_ss));
                     } else {
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
-                                .title(strSignName))
-                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign80_s));
+                                .title(strSignName)
+                                .snippet(strSignID))
+                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign80_ss));
                     }
                     mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                     LatLng coordinate = new LatLng (Double.parseDouble(strLat), Double.parseDouble(strLng));
@@ -256,10 +259,14 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         Geocoder gc = new Geocoder(this);
         List<Address> list = gc.getFromLocationName(location, 1);
         android.location.Address address = list.get(0);
-        String locality = address.getLocality();
+        //String locality = address.getLocality();
+        //ค้นหาตำแหน่ง
+       String locality = String.format("%s, %s",
+                address.getMaxAddressLineIndex() > 0 ?
+                address.getAddressLine(0) : "",
+                address.getCountryName());
 
-        Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
-
+        //Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
         double lnt = address.getLatitude();
         double lng = address.getLongitude();
         goToLocationZoom(lnt, lng, 15);
@@ -275,8 +282,8 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                 .title(locality)
                 .position(new LatLng(lnt,lng))
                 //can move
-                .draggable(true)
-                .snippet("I am here");
+                .draggable(true);
+                //.snippet("I am here");
         marker = mGoogleMap.addMarker(options);
     }//setMarker
 
@@ -292,10 +299,9 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         insertBackground.execute(type,str_signname,str_latitude,str_longitude,str_adId);
 
         //alert msg
-        MyAlert myAlert = new MyAlert(InsertActivity.this, R.drawable.bird48,
+        MyAlert myAlert = new MyAlert(InsertActivity.this, R.drawable.sign45_ss,
                 getResources().getString(R.string.title_insert),
                 getResources().getString(R.string.message_insert));
         myAlert.myDialog();
-
     }//on click insert
 }//Main Class

@@ -39,7 +39,7 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
     GoogleMap mGoogleMap;
     EditText edtSignName,edtSearch;
     ImageView imgSearch, imgInsert;
-
+    private MyConstant myConstant;
     //GoogleApiClient mGoogleClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,9 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
         } else {
             //No google map layout
         }
+
+       // SynUser synUser = new SynUser(DelActivity.this);
+       // synUser.execute(myConstant.getUrlGetSign());
     }//Main Method
 
     //Search Map All
@@ -97,7 +100,6 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
                     String strSignName = jsonObject.getString("SignName");
                     String strLat = jsonObject.getString("Latitude");
                     String strLng = jsonObject.getString("Longitude");
-                    //String strIcon = jsonObject.getString("IConID");
 
                     // MapIcon mapIcon = new MapIcon(context, Integer.parseInt(strIcon));
                     //Create Marker Sign
@@ -105,30 +107,25 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
                                 .title(strSignName))
-                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign45_s));
+                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign45_ss));
 
                     } else if (strSignName.equals("sign60")) {
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
                                 .title(strSignName))
-                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign60_s));
+                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign60_ss));
                     } else {
-                        //(strSignName.equals(strSignName.equals("sign80") || strSignName.equals("Sign80"))) //{
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
                                 .title(strSignName))
-                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign80_s));
+                                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign80_ss));
                     }
-                    //}else
-                        /*mGoogleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
-                            .title(strSignName));
-                            //.icon(BitmapDescriptorFactory.fromResource(mapIcon.showIcon())));*/
+
                     mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                     LatLng coordinate = new LatLng (Double.parseDouble(strLat), Double.parseDouble(strLng));
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 15));
                     goToLocationZoom(Double.parseDouble(strLat), Double.parseDouble(strLng));
-                    //  Log.d("Data", strIcon);
+
                 }// for
             } catch (Exception e) {
                 e.printStackTrace();
@@ -263,11 +260,10 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
         // LatLng latLng = marker.getPosition();
         MarkerOptions options = new MarkerOptions()
                 .title(locality)
-                .position(new LatLng(lnt,lng))
+                .position(new LatLng(lnt, lng))
                 //can move
-                .draggable(true)
-                .snippet("I am here");
+                .draggable(true);
+                //.snippet("I am here");
         marker = mGoogleMap.addMarker(options);
     }//setMarker
-
 }//Main Class

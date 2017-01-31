@@ -68,7 +68,12 @@ public class AdminPage extends AppCompatActivity {
         imgEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AdminPage.this,EditActivity.class));
+                String adminID = AdIdTextView.getText().toString();
+                Intent intent = new Intent(getApplicationContext(), EditActivity.class);
+                intent.putExtra("adminID", adminID);
+                Log.d("adminID","ID:"+ adminID);
+                startActivity(intent);
+                //startActivity(new Intent(AdminPage.this,EditActivity.class));
             }
         });
         //imgDel controller
