@@ -33,6 +33,7 @@ public class InsertBackground extends AsyncTask<String, Void, String> {
         String type = params[0];
         //url จากของ server
         String insert_url = "http://202.28.94.32/2559/563020232-9/add2.php";
+        String delete_url = "http://202.28.94.32/2559/563020232-9/deletesign.php";
         if (type.equals("insert")) {
             try {
                 String str_signname = params[1];
@@ -113,6 +114,41 @@ public class InsertBackground extends AsyncTask<String, Void, String> {
                 e.printStackTrace();
             }
 
+        }//else if
+        else if (type.equals("delete")) {
+            try {
+                String str_signId = params[1];
+
+                URL url = new URL(delete_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                String post_data = URLEncoder.encode("SignID", "UTF-8") + "=" + URLEncoder.encode(str_signId, "UTF-8");
+                //SignName,Latitude,Longitude,AdID ชื่อคอลัมในฐานข้อมูล
+                bufferedWriter.write(post_data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String result = "";
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null) {
+                    result += line;
+                }
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+                return result;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }//else if
 
         return null;

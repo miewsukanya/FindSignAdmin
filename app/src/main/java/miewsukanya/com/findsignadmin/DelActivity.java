@@ -2,6 +2,7 @@ package miewsukanya.com.findsignadmin;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
@@ -38,6 +39,7 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
     //Explicit
     GoogleMap mGoogleMap;
     EditText edtSignName,edtSearch;
+    TextView tv_signid;
     ImageView imgSearch, imgInsert;
     private MyConstant myConstant;
     //GoogleApiClient mGoogleClient;
@@ -55,9 +57,16 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
         } else {
             //No google map layout
         }
+        //intent data from mainActivity 29/01/17
+        TextView textView = (TextView) findViewById(R.id.textView3);
+        Intent intent = getIntent();
+        String adminID = intent.getStringExtra("adminID");
+        textView.setText(adminID);
+        textView.setTextSize(20);
+        Log.d("adminID", "ID :" + adminID);
 
-       // SynUser synUser = new SynUser(DelActivity.this);
-       // synUser.execute(myConstant.getUrlGetSign());
+        tv_signid = (TextView) findViewById(R.id.tv_signid);
+
     }//Main Method
 
     //Search Map All
@@ -101,26 +110,31 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
                     String strLat = jsonObject.getString("Latitude");
                     String strLng = jsonObject.getString("Longitude");
 
+                  //  EditText edt_signid = (EditText) findViewById(R.id.edt_signid);
                     // MapIcon mapIcon = new MapIcon(context, Integer.parseInt(strIcon));
                     //Create Marker Sign
                     if (strSignName.equals("Sign45") || strSignName.equals("sign45")) {
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
-                                .title(strSignName))
+                                .title(strSignName)
+                                .snippet(strSignID))
                                 .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign45_ss));
 
                     } else if (strSignName.equals("Sign60") || strSignName.equals("sign60")) {
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
-                                .title(strSignName))
+                                .title(strSignName)
+                                .snippet(strSignID))
                                 .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign60_ss));
+
                     } else {
                         mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(strLat), Double.parseDouble(strLng)))
-                                .title(strSignName))
+                                .title(strSignName)
+                                .snippet(strSignID))
                                 .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign80_ss));
-                    }
 
+                    }
                     mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                     LatLng coordinate = new LatLng (Double.parseDouble(strLat), Double.parseDouble(strLng));
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 15));
@@ -135,6 +149,7 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
 
     //ZoomMap
     private void goToLocationZoom(double v, double v1) {
+        mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         LatLng latlng = new LatLng(v, v1);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng,15);
         mGoogleMap.moveCamera(update);
@@ -162,6 +177,7 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
 
     //class zoom map
     private void goToLocationZoom(double lat, double lng, float zoom) {
+        mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         LatLng latlng = new LatLng(lat, lng);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng, zoom);
         mGoogleMap.moveCamera(update);
@@ -172,7 +188,7 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         if (mGoogleMap != null){
-//move icon place
+            //move icon place
             mGoogleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                 @Override
                 public void onMarkerDragStart(Marker marker) {
@@ -209,6 +225,8 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
                 @Override
                 public View getInfoContents(Marker marker) {
 
+                    final TextView signid = (TextView) findViewById(R.id.tv_signid);
+
                     View v = getLayoutInflater().inflate(R.layout.info_window,null);
                     TextView tvLocality = (TextView) v.findViewById(R.id.tv_locality);
                     TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
@@ -220,12 +238,12 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
                     tvLat.setText("Latitude: "+latLng.latitude);
                     tvLng.setText("Longitude: "+latLng.longitude);
                     tvSnippet.setText(marker.getSnippet());
-
+                    //get sing id from sign
+                    signid.setText(marker.getSnippet());
                     return v;
-
                 }
             });
-        }
+        }//if
     }//onMapReady
 
     Marker marker;
@@ -240,30 +258,42 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
         android.location.Address address = list.get(0);
         String locality = address.getLocality();
 
-        Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
-
+       // Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
+        mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         double lnt = address.getLatitude();
         double lng = address.getLongitude();
         goToLocationZoom(lnt, lng, 15);
+        edtSearch.setText("");
         //ปักหมุดสถานที่
-        setMarker(locality, lnt, lng);
+       // setMarker(locality, lnt, lng);
     }//geoLocate onclick
 
     private void setMarker(String locality, double lnt, double lng) {
-        /*double lnt1 = lnt;
-        String lnt2 = String.valueOf(lnt1);
-        double lng1 = lng;
-        String lng2 = String.valueOf(lng1);*/
         if (marker != null){
             marker.remove();
         }
-        // LatLng latLng = marker.getPosition();
         MarkerOptions options = new MarkerOptions()
                 .title(locality)
-                .position(new LatLng(lnt, lng))
+                .position(new LatLng(lnt, lng));
                 //can move
-                .draggable(true);
+                //.draggable(true);
                 //.snippet("I am here");
         marker = mGoogleMap.addMarker(options);
     }//setMarker
+
+    public void deleteOnclick(View view) {
+        //get signId from textView
+        String str_signId = tv_signid.getText().toString();
+        String type = "delete";
+
+        InsertBackground insertBackground = new InsertBackground(this);
+        insertBackground.execute(type,str_signId);
+
+        //alert msg
+        MyAlert myAlert = new MyAlert(DelActivity.this, R.drawable.sign45_ss,
+                getResources().getString(R.string.title_delete),
+                getResources().getString(R.string.message_delete));
+        myAlert.myDialog();
+
+    }//delete onClick
 }//Main Class

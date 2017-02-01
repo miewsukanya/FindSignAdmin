@@ -19,24 +19,13 @@
 
 
         <TextView
-            android:text="ชื่อป้าย:"
             android:textSize="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView3"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="50dp"
+            android:textColor="#ffffff"
             />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="กรุณากรอกชื่อป้าย"
-            android:ems="10"
-            android:id="@+id/edtSignName"
-            android:layout_marginTop="80dp"
-            android:paddingLeft="15dp"
-            android:layout_marginLeft="15dp" />
 
     </LinearLayout>
 
@@ -80,13 +69,13 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_width="350dp"
-            android:layout_height="250dp" />
+            android:layout_height="330dp" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_width="159dp"
@@ -94,7 +83,8 @@
             android:id="@+id/ingDelSign"
             android:layout_marginTop="5dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/but_del" />
+            android:src="@drawable/but_del"
+            android:onClick="deleteOnclick" />
 
     </LinearLayout>
 
@@ -103,21 +93,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
+        <TextView
+            android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="Name"
-            android:ems="10"
-            android:id="@+id/edt_lat" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="Name"
-            android:ems="10"
-            android:id="@+id/edt_lng" />
+            android:id="@+id/tv_signid"
+            android:textColor="#ffffff"/>
     </LinearLayout>
 
 </LinearLayout>

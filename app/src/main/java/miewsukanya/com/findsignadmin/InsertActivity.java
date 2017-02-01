@@ -147,6 +147,7 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         marker = mGoogleMap.addMarker(options);
         goToLocationZoom(gps.getLatitude(),gps.getLongitude(),15);
 
+        Log.d("01FebV2", "Marker" + "Lat:" + gps.getLatitude() + "Lng:" + gps.getLongitude());
         if (mGoogleMap != null){
 
             //touch map set marker
@@ -154,13 +155,13 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                 @Override
                 public void onMapClick(LatLng latLng) {
                     //touch map add marker
-                    //  int n = 99;
-                    if (marker != null) {
+                    if (marker != null){
                         marker.remove();
                     }
                     mGoogleMap.addMarker(new MarkerOptions().position(latLng));
                     marker.showInfoWindow();
-                    marker.remove();
+
+                  //  marker.remove();
                 }//on map click
             });
 
@@ -197,7 +198,6 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                     android.location.Address add = list.get(0);
                     marker.setTitle(add.getLocality());
                     marker.showInfoWindow();*/
-                   // marker.remove();
                 }//on drag end marker
 
             });
@@ -366,13 +366,16 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         goToLocationZoom(lnt, lng, 15);
         //ปักหมุดสถานที่
         setMarker(locality, lnt, lng);
-
+        edtSearch.setText("");
     }//geoLocate onclick
 
     private void setMarker(String locality, double lnt, double lng) {
-        if (marker != null){
-            marker.remove();
-        }
+        //int n = 99;
+        //for (int i = 0;i<=n;i++) {
+            /*if (marker != null){
+                mGoogleMap.clear();
+            }*/
+       // }
         MarkerOptions options = new MarkerOptions()
                 .title(locality)
                 .position(new LatLng(lnt, lng));
