@@ -3,10 +3,17 @@ package miewsukanya.com.findsignadmin;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -48,22 +55,28 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
     TextView edt_adId;
     RadioGroup signnameRadioGroup;
     RadioButton signnameRadioButton;
+
+    GPSTracker gps;
+    private LocationManager locationManager;
+    private LocationListener listener;
     //RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (googleServicesAvailable()) {
+        setContentView(R.layout.activity_insert);
+        /*if (googleServicesAvailable()) {
             // Toast.makeText(this, "Perfect!!", Toast.LENGTH_LONG).show();
             setContentView(R.layout.activity_insert);
 
-            GetMap getMap = new GetMap(InsertActivity.this);
-            getMap.execute();
-            initMap();
+           // GetMap getMap = new GetMap(InsertActivity.this);
+           // getMap.execute();
+
+           // initMap();
 
         } else {
             //No google map layout
-        }
+        }*/
         //intent data from mainActivity 29/01/17
         TextView textView = (TextView) findViewById(R.id.textView6);
         Intent intent = getIntent();
@@ -75,14 +88,65 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         edt_lat = (EditText) findViewById(R.id.edt_lat);
         edt_lng = (EditText) findViewById(R.id.edt_lng);
         edt_adId = (TextView) findViewById(R.id.textView6);
-        //requestQueue = Volley.newRequestQueue(getApplicationContext());
 
+        //get lat lng location device
+        listener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+            }
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };{
+            gps = new GPSTracker(InsertActivity.this);
+
+            if(gps.canGetLocation()){
+
+                double latitude = gps.getLatitude();
+                double longitude = gps.getLongitude();
+                edt_lat.setText(latitude+"");
+                edt_lng.setText(longitude+"");
+
+                Log.d("01FebV1", "Marker" + "Lat:" + latitude + "Lng:" + longitude);
+
+            }else{
+                // txtLocation.setText("อุปกรณ์์ของคุณ ปิด GPS");
+            }
+            configure_button();
+        }//listener
+
+        GetMap getMap = new GetMap(InsertActivity.this);
+        getMap.execute();
+        initMap();
     }//Main Method
+
+    //Show map
+    private void initMap() {
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+        mapFragment.getMapAsync(this);
+    }//initMap
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        //set marker from gps device
+        MarkerOptions options = new MarkerOptions()
+                .position(new LatLng(gps.getLatitude(), gps.getLongitude()));
+        marker = mGoogleMap.addMarker(options);
+        goToLocationZoom(gps.getLatitude(),gps.getLongitude(),15);
+
         if (mGoogleMap != null){
 
             //touch map set marker
@@ -96,7 +160,7 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                     }
                     mGoogleMap.addMarker(new MarkerOptions().position(latLng));
                     marker.showInfoWindow();
-                    // marker.remove();
+                    marker.remove();
                 }//on map click
             });
 
@@ -167,7 +231,9 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                     return v;
                 }
             });
-        }
+        }//if
+
+
     }//onMapReady
 
     //Search Map All
@@ -175,6 +241,7 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         //Explicit
         private Context context;
         private static final String urlJSON = "http://202.28.94.32/2559/563020232-9/getlatlong.php";
+
 
         public GetMap(Context context) {
             this.context = context;
@@ -200,8 +267,8 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
 
             Log.d("26novV1", "Json ==>" + s);
             try {
-                JSONArray jsonArray = new JSONArray(s);
 
+                JSONArray jsonArray = new JSONArray(s);
                 for (int i = 0; i < jsonArray.length(); i += 1) {
                     //Get Json from Database
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -234,6 +301,7 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                                 .snippet(strSignID))
                                 .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign80_ss));
                     }
+
                     mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                     LatLng coordinate = new LatLng (Double.parseDouble(strLat), Double.parseDouble(strLng));
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 15));
@@ -253,11 +321,7 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         mGoogleMap.moveCamera(update);
     }//goToLocationZoom
 
-    //Show map
-    private void initMap() {
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
-        mapFragment.getMapAsync(this);
-    }//initMap
+
 
     public boolean googleServicesAvailable() {
         GoogleApiAvailability api = GoogleApiAvailability.getInstance();
@@ -297,12 +361,12 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                 address.getAddressLine(0) : "",
                 address.getCountryName());
 
-        //Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
         double lnt = address.getLatitude();
         double lng = address.getLongitude();
         goToLocationZoom(lnt, lng, 15);
         //ปักหมุดสถานที่
         setMarker(locality, lnt, lng);
+
     }//geoLocate onclick
 
     private void setMarker(String locality, double lnt, double lng) {
@@ -316,7 +380,6 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                 // .draggable(true);
                 //.snippet("I am here");
         marker = mGoogleMap.addMarker(options);
-
     }//setMarker
 
     List<Marker >mMarkers = new ArrayList<Marker>() ;
@@ -326,6 +389,27 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         }
         mMarkers.clear();
     }//remove marker
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 10:
+                configure_button();
+                break;
+            default:
+                break;
+        }
+    }
+    void configure_button(){
+        // first check for permissions
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.INTERNET}
+                        ,10);
+            }
+            return;
+        }
+    }//onRequestPermissionsResult
 
     //insert lat lng
     public void insert (View view){
@@ -350,5 +434,6 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                 getResources().getString(R.string.title_insert),
                 getResources().getString(R.string.message_insert));
         myAlert.myDialog();
+
     }//on click insert
 }//Main Class
