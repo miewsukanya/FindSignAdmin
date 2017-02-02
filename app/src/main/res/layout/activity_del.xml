@@ -27,6 +27,15 @@
             android:textColor="#ffffff"
             />
 
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_signid"
+            android:textColor="#ffffff"
+            android:layout_weight="1"
+            android:layout_marginLeft="150dp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -97,7 +106,14 @@
             android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_signid"
+            android:id="@+id/textView_lat"
+            android:textColor="#ffffff"/>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_lng"
             android:textColor="#ffffff"/>
     </LinearLayout>
 

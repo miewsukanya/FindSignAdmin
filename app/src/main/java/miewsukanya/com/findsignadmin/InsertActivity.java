@@ -124,7 +124,6 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
             }
             configure_button();
         }//listener
-
         GetMap getMap = new GetMap(InsertActivity.this);
         getMap.execute();
         initMap();
@@ -137,39 +136,34 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
     }//initMap
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        //set marker from gps device
-        MarkerOptions options = new MarkerOptions()
-                .position(new LatLng(gps.getLatitude(), gps.getLongitude()));
-        marker = mGoogleMap.addMarker(options);
-        goToLocationZoom(gps.getLatitude(),gps.getLongitude(),15);
-
-        Log.d("01FebV2", "Marker" + "Lat:" + gps.getLatitude() + "Lng:" + gps.getLongitude());
         if (mGoogleMap != null){
 
             //touch map set marker
             mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {
-                    //touch map add marker
-                    if (marker != null){
+
+                    //remove marker
+                    if (marker != null) {
                         marker.remove();
                     }
-                    mGoogleMap.addMarker(new MarkerOptions().position(latLng));
+                    //touch map add marker
+                    MarkerOptions options = new MarkerOptions()
+                            .position(latLng);
+                    marker = mGoogleMap.addMarker(options);
                     marker.showInfoWindow();
-
-                  //  marker.remove();
                 }//on map click
             });
-
             //touch marker remove
             mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                   // marker.remove();
+
+                 //   marker.remove();
                     return false;
                 }
             });
@@ -232,7 +226,6 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                 }
             });
         }//if
-
 
     }//onMapReady
 
@@ -303,10 +296,22 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                     }
 
                     mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                    LatLng coordinate = new LatLng (Double.parseDouble(strLat), Double.parseDouble(strLng));
+                    goToLocationZoom(Double.parseDouble(strLat), Double.parseDouble(strLng),15);
+
+                    //remove marker
+                    if (marker != null) {
+                        marker.remove();
+                    }
+                    //set marker from gps device
+                    MarkerOptions options = new MarkerOptions()
+                            .position(new LatLng(gps.getLatitude(), gps.getLongitude()));
+                    marker = mGoogleMap.addMarker(options);
+                    marker.showInfoWindow();
+                    LatLng coordinate = new LatLng (gps.getLatitude(),gps.getLongitude());
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 15));
-                    goToLocationZoom(Double.parseDouble(strLat), Double.parseDouble(strLng));
-                    //  Log.d("Data", strIcon);
+                    goToLocationZoom(gps.getLatitude(),gps.getLongitude(),15);
+                    Log.d("01FebV2", "Marker" + "Lat:" + gps.getLatitude() + "Lng:" + gps.getLongitude());
+
                 }// for
             } catch (Exception e) {
                 e.printStackTrace();
@@ -320,8 +325,6 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng,15);
         mGoogleMap.moveCamera(update);
     }//goToLocationZoom
-
-
 
     public boolean googleServicesAvailable() {
         GoogleApiAvailability api = GoogleApiAvailability.getInstance();
@@ -365,32 +368,32 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         double lng = address.getLongitude();
         goToLocationZoom(lnt, lng, 15);
         //ปักหมุดสถานที่
-        setMarker(locality, lnt, lng);
+       setMarker(locality, lnt, lng);
         edtSearch.setText("");
     }//geoLocate onclick
 
     private void setMarker(String locality, double lnt, double lng) {
         //int n = 99;
         //for (int i = 0;i<=n;i++) {
-            /*if (marker != null){
-                mGoogleMap.clear();
-            }*/
+            if (marker != null){
+                marker.remove();
+            }
        // }
         MarkerOptions options = new MarkerOptions()
                 .title(locality)
                 .position(new LatLng(lnt, lng));
-                //can move
-                // .draggable(true);
-                //.snippet("I am here");
+        //can move
+        // .draggable(true);
+        //.snippet("I am here");
         marker = mGoogleMap.addMarker(options);
     }//setMarker
 
-    List<Marker >mMarkers = new ArrayList<Marker>() ;
+    List<Marker >Markers = new ArrayList<Marker>() ;
     private void removeMarkers() {
-        for (Marker marker : mMarkers) {
+        for (Marker marker : Markers) {
             marker.remove();
         }
-        mMarkers.clear();
+        Markers.clear();
     }//remove marker
 
     @Override
@@ -437,6 +440,10 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                 getResources().getString(R.string.title_insert),
                 getResources().getString(R.string.message_insert));
         myAlert.myDialog();
+
+        GetMap getMap = new GetMap(InsertActivity.this);
+        getMap.execute();
+        initMap();
 
     }//on click insert
 }//Main Class

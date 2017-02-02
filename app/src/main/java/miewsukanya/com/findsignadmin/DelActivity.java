@@ -3,10 +3,17 @@ package miewsukanya.com.findsignadmin;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -39,9 +46,12 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
     //Explicit
     GoogleMap mGoogleMap;
     EditText edtSignName,edtSearch;
-    TextView tv_signid;
+    TextView tv_signid,textView_lat,textView_lng;
     ImageView imgSearch, imgInsert;
     private MyConstant myConstant;
+    GPSTracker gps;
+    private LocationManager locationManager;
+    private LocationListener listener;
     //GoogleApiClient mGoogleClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +76,47 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
         Log.d("adminID", "ID :" + adminID);
 
         tv_signid = (TextView) findViewById(R.id.tv_signid);
+        textView_lat = (TextView) findViewById(R.id.textView_lat);
+        textView_lng = (TextView) findViewById(R.id.textView_lng);
 
+        //get lat lng location device
+        listener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+            }
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };{
+            gps = new GPSTracker(DelActivity.this);
+
+            if(gps.canGetLocation()){
+
+                double latitude = gps.getLatitude();
+                double longitude = gps.getLongitude();
+                textView_lat.setText(latitude+"");
+                textView_lng.setText(longitude+"");
+
+                Log.d("01FebV1", "Marker" + "Lat:" + latitude + "Lng:" + longitude);
+
+            }else{
+                // txtLocation.setText("อุปกรณ์์ของคุณ ปิด GPS");
+            }
+            configure_button();
+        }//listener
+        GetMap getMap = new GetMap(DelActivity.this);
+        getMap.execute();
+        initMap();
     }//Main Method
 
     //Search Map All
@@ -135,10 +185,17 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
                                 .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sign80_ss));
 
                     }
-                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    /*mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                     LatLng coordinate = new LatLng (Double.parseDouble(strLat), Double.parseDouble(strLng));
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 15));
-                    goToLocationZoom(Double.parseDouble(strLat), Double.parseDouble(strLng));
+                    goToLocationZoom(Double.parseDouble(strLat), Double.parseDouble(strLng));*/
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    goToLocationZoom(Double.parseDouble(strLat), Double.parseDouble(strLng),15);
+
+                    //set marker from gps device
+                    LatLng coordinate = new LatLng (gps.getLatitude(),gps.getLongitude());
+                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 15));
+                    goToLocationZoom(gps.getLatitude(),gps.getLongitude(),15);
 
                 }// for
             } catch (Exception e) {
@@ -281,6 +338,27 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
         marker = mGoogleMap.addMarker(options);
     }//setMarker
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 10:
+                configure_button();
+                break;
+            default:
+                break;
+        }
+    }
+    void configure_button(){
+        // first check for permissions
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.INTERNET}
+                        ,10);
+            }
+            return;
+        }
+    }//onRequestPermissionsResult
+
     public void deleteOnclick(View view) {
         //get signId from textView
         String str_signId = tv_signid.getText().toString();
@@ -294,6 +372,10 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
                 getResources().getString(R.string.title_delete),
                 getResources().getString(R.string.message_delete));
         myAlert.myDialog();
+
+        GetMap getMap = new GetMap(DelActivity.this);
+        getMap.execute();
+        initMap();
 
     }//delete onClick
 }//Main Class
