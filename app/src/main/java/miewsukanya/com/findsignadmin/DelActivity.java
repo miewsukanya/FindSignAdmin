@@ -373,6 +373,7 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
                 getResources().getString(R.string.message_delete));
         myAlert.myDialog();
 
+        //get map after delete
         GetMap getMap = new GetMap(DelActivity.this);
         getMap.execute();
         initMap();

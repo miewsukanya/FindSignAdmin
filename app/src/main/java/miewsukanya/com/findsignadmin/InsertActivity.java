@@ -441,6 +441,7 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
                 getResources().getString(R.string.message_insert));
         myAlert.myDialog();
 
+        //get map after insert sign
         GetMap getMap = new GetMap(InsertActivity.this);
         getMap.execute();
         initMap();
