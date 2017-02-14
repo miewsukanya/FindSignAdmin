@@ -368,7 +368,7 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
         insertBackground.execute(type,str_signId);
 
         //alert msg
-        MyAlert myAlert = new MyAlert(DelActivity.this, R.drawable.sign45_ss,
+        MyAlert myAlert = new MyAlert(DelActivity.this, R.drawable.iconapp,
                 getResources().getString(R.string.title_delete),
                 getResources().getString(R.string.message_delete));
         myAlert.myDialog();
@@ -377,6 +377,7 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
         GetMap getMap = new GetMap(DelActivity.this);
         getMap.execute();
         initMap();
+
 
     }//delete onClick
 }//Main Class

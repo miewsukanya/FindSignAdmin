@@ -436,7 +436,7 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         insertBackground.execute(type,str_signname,str_latitude,str_longitude,str_adId);
 
         //alert msg
-        MyAlert myAlert = new MyAlert(InsertActivity.this, R.drawable.sign45_ss,
+        MyAlert myAlert = new MyAlert(InsertActivity.this, R.drawable.iconapp,
                 getResources().getString(R.string.title_insert),
                 getResources().getString(R.string.message_insert));
         myAlert.myDialog();
