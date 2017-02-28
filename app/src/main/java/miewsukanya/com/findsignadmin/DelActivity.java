@@ -160,7 +160,7 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
                     String strLat = jsonObject.getString("Latitude");
                     String strLng = jsonObject.getString("Longitude");
 
-                  //  EditText edt_signid = (EditText) findViewById(R.id.edt_signid);
+                    //  EditText edt_signid = (EditText) findViewById(R.id.edt_signid);
                     // MapIcon mapIcon = new MapIcon(context, Integer.parseInt(strIcon));
                     //Create Marker Sign
                     if (strSignName.equals("Sign45") || strSignName.equals("sign45")) {
@@ -315,14 +315,14 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
         android.location.Address address = list.get(0);
         String locality = address.getLocality();
 
-       // Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
+        // Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         double lnt = address.getLatitude();
         double lng = address.getLongitude();
         goToLocationZoom(lnt, lng, 15);
         edtSearch.setText("");
         //ปักหมุดสถานที่
-       // setMarker(locality, lnt, lng);
+        // setMarker(locality, lnt, lng);
     }//geoLocate onclick
 
     private void setMarker(String locality, double lnt, double lng) {
@@ -332,9 +332,9 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
         MarkerOptions options = new MarkerOptions()
                 .title(locality)
                 .position(new LatLng(lnt, lng));
-                //can move
-                //.draggable(true);
-                //.snippet("I am here");
+        //can move
+        //.draggable(true);
+        //.snippet("I am here");
         marker = mGoogleMap.addMarker(options);
     }//setMarker
 

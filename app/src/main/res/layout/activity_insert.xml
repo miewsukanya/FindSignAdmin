@@ -73,7 +73,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/rad_sign45"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp" />
+                android:layout_marginLeft="10dp"
+                android:checked="true"/>
 
             <RadioButton
                 android:text="@string/sign60"
