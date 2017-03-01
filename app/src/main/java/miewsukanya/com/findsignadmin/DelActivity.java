@@ -332,7 +332,7 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
         MarkerOptions options = new MarkerOptions()
                 .title(locality)
                 .position(new LatLng(lnt, lng));
-        //can move
+
         //.draggable(true);
         //.snippet("I am here");
         marker = mGoogleMap.addMarker(options);
