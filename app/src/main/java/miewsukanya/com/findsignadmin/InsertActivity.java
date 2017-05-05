@@ -442,9 +442,13 @@ public class InsertActivity extends AppCompatActivity implements OnMapReadyCallb
         myAlert.myDialog();
 
         //get map after insert sign
-        GetMap getMap = new GetMap(InsertActivity.this);
-        getMap.execute();
-        initMap();
+         GetMap getMap = new GetMap(InsertActivity.this);
+         getMap.execute();
+         initMap();
+       // Intent intent = new Intent(getApplicationContext(), AdminPage.class);
+       // startActivity(intent);
+
+
 
     }//on click insert
 }//Main Class

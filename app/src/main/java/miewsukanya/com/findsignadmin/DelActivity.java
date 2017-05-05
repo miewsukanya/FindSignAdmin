@@ -373,10 +373,15 @@ public class DelActivity extends AppCompatActivity implements OnMapReadyCallback
                 getResources().getString(R.string.message_delete));
         myAlert.myDialog();
 
+       // marker.remove();
+       // Intent intent = new Intent(getApplicationContext(), AdminPage.class);
+       // startActivity(intent);
         //get map after delete
         GetMap getMap = new GetMap(DelActivity.this);
         getMap.execute();
         initMap();
+
+
 
 
     }//delete onClick
