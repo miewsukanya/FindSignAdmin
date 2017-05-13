@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     //Explicit
-    private ImageView imgLogin;
+    private ImageView imgLogin,imgInfo;
     private EditText edtUsername, edtPassword;
     private String userString, passwordString;
     private MyConstant myConstant;
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Bind Widget
         imgLogin = (ImageView) findViewById(R.id.imgLogin);
+        imgInfo = (ImageView) findViewById(R.id.imgInfo);
         edtUsername = (EditText) findViewById(R.id.edtUsername);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
 
@@ -60,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
                 SynUser synUser = new SynUser(MainActivity.this);
                 synUser.execute(myConstant.getUrlGetJSON());
             }   // onClick
+        });
+
+        imgInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), InfoAdminActivity.class);
+                startActivity(intent);
+            }
         });
     }//Main Method
 

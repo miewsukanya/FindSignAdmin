@@ -14,6 +14,13 @@
     android:orientation="vertical">
 
 
+    <ImageView
+        android:layout_height="54dp"
+        app:srcCompat="@drawable/iconinfo"
+        android:id="@+id/imgInfo"
+        android:layout_marginLeft="310dp"
+        android:layout_width="56dp" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
@@ -71,4 +78,5 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
         android:onClick="sendmassage" />
+
 </LinearLayout>
